@@ -1,0 +1,153 @@
+1st METHOD :
+
+#include <stdio.h>
+
+int main() {
+    int n, i;
+    int bt[20];     // Burst Time
+    int wt[20];     // Waiting Time
+    int tat[20];    // Turnaround Time
+    int total_wt = 0, total_tat = 0;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    printf("Enter burst time for each process:\n");
+    for (i = 0; i < n; i++) {
+        printf("Process %d: ", i + 1);
+        scanf("%d", &bt[i]);
+    }
+
+    // First process has 0 waiting time
+    wt[0] = 0;
+
+    // Calculate waiting time for each process
+    for (i = 1; i < n; i++) {
+        wt[i] = wt[i - 1] + bt[i - 1];
+    }
+
+    // Calculate turnaround time and total times
+    for (i = 0; i < n; i++) {
+        tat[i] = wt[i] + bt[i];
+        total_wt += wt[i];
+        total_tat += tat[i];
+    }
+
+    // Print results
+    printf("\nProcess\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (i = 0; i < n; i++) {
+        printf("P%d\t%d\t\t%d\t\t%d\n", i + 1, bt[i], wt[i], tat[i]);
+    }
+
+    printf("\nAverage Waiting Time: %.2f\n", (float)total_wt / n);
+    printf("Average Turnaround Time: %.2f\n", (float)total_tat / n);
+
+    return 0;
+}
+
+OUTPUT :
+Enter number of processes: 3
+Enter burst time for each process:
+Process 1: 5
+Process 2: 8
+Process 3: 3
+
+Process	Burst Time	Waiting Time	Turnaround Time
+P1	5		0		5
+P2	8		5		13
+P3	3		13		16
+
+Average Waiting Time: 6.00
+Average Turnaround Time: 11.33
+
+
+
+
+
+
+
+
+
+
+
+
+2nd METHOD :
+
+#include <stdio.h>
+
+int main() {
+    int n, i, j;
+    int at[20], bt[20], ct[20], tat[20], wt[20];
+    int temp;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    // Input Arrival and Burst times
+    for (i = 0; i < n; i++) {
+        printf("Process %d\n", i + 1);
+        printf("Arrival Time: ");
+        scanf("%d", &at[i]);
+        printf("Burst Time: ");
+        scanf("%d", &bt[i]);
+    }
+
+    // Sort by arrival time
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (at[j] > at[j + 1]) {
+                // Swap arrival times
+                temp = at[j];
+                at[j] = at[j + 1];
+                at[j + 1] = temp;
+                // Swap burst times
+                temp = bt[j];
+                bt[j] = bt[j + 1];
+                bt[j + 1] = temp;
+            }
+        }
+    }
+
+    // Calculate Completion Time
+    ct[0] = at[0] + bt[0];
+    for (i = 1; i < n; i++) {
+        if (ct[i - 1] < at[i]) {
+            ct[i] = at[i] + bt[i]; // CPU idle time
+        } else {
+            ct[i] = ct[i - 1] + bt[i];
+        }
+    }
+
+    // Calculate TAT and WT
+    for (i = 0; i < n; i++) {
+        tat[i] = ct[i] - at[i];  // Turnaround time
+        wt[i] = tat[i] - bt[i];  // Waiting time
+    }
+
+    // Print the final table
+    printf("\nProcess\tArrival\tBurst\tCompletion\tTurnaround\tWaiting\n");
+    for (i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t\t%d\t\t%d\n", i + 1, at[i], bt[i], ct[i], tat[i], wt[i]);
+    }
+
+    return 0;
+}
+
+OUTPUT :
+
+Enter number of processes: 3
+Process 1
+Arrival Time: 0
+Burst Time: 5
+Process 2
+Arrival Time: 1
+Burst Time: 8
+Process 3
+Arrival Time: 2
+Burst Time: 6
+
+Process	Arrival	Burst	Completion	Turnaround	Waiting
+P1	0	5	5		5		0
+P2	1	8	13		12		4
+P3	2	6	19		17		11
+
