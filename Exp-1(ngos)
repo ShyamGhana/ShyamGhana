@@ -12,30 +12,30 @@ int main()
     if (pid < 0)
     {
         printf("fork failed to create child process\n");
-        exit(1);  // Exit with error status
+         
     }
     else if (pid == 0)
     {
-        // Child process
+        
         printf("child process: pid = %d, parent pid = %d\n", getpid(), getppid());
-        sleep(3);  // Sleep for 3 seconds
+        sleep(3);  
         execl("/bin/ls", "ls", "-l", (char*)NULL);
         
-        // If execl returns, it means it failed
-        perror("execl failed");
-        exit(1);
+        
+        
     }
     else
     {
-        // Parent process
-        printf("parent process: pid = %d, child pid = %d\n", getpid(),getppid());
-        wait(NULL);  // Wait for child to complete
+    
+        printf("parent process: pid = %d, child process = %d\n", getpid(),getppid());
+        wait(NULL);  
     }
     
     return 0;
 }
 
+
 OUTPUT :
-parent process: pid = 129413, child pid = 129406
-child process: pid = 129414, parent pid = 129413
+parent process: pid = 8633, child process = 8626
+child process: pid = 8634, parent pid = 8633
 total 0
