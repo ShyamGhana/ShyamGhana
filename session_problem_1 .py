@@ -96,7 +96,7 @@ models = {
 
 results = {}
 for name, model in models.items():
-    print(f"\n🔵 Training {name}...")
+    print(f"\nTraining {name}...")
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     y_proba = model.predict_proba(X_test)[:, 1]
@@ -108,4 +108,88 @@ for name, model in models.items():
 
 # Best model
 best_model = max(results, key=results.get)
-print(f"\n✅ Best Model: {best_model} with ROC-AUC: {results[best_model]:.4f}")
+print(f"\nBest Model: {best_model} with ROC-AUC: {results[best_model]:.4f}")
+
+#OUTPUT 
+
+============================================================
+CREDIT CARD DEFAULT PREDICTION
+============================================================
+Dataset downloaded successfully!
+Dataset shape: (30000, 25)
+
+First 5 rows:
+   ID  LIMIT_BAL  SEX  EDUCATION  MARRIAGE  AGE  PAY_0  PAY_2  PAY_3  PAY_4  \
+0   1      20000    2          2         1   24      2      2     -1     -1   
+1   2     120000    2          2         2   26     -1      2      0      0   
+2   3      90000    2          2         2   34      0      0      0      0   
+3   4      50000    2          2         1   37      0      0      0      0   
+4   5      50000    1          2         1   57     -1      0     -1      0   
+
+   ...  BILL_AMT4  BILL_AMT5  BILL_AMT6  PAY_AMT1  PAY_AMT2  PAY_AMT3  \
+0  ...          0          0          0         0       689         0   
+1  ...       3272       3455       3261         0      1000      1000   
+2  ...      14331      14948      15549      1518      1500      1000   
+3  ...      28314      28959      29547      2000      2019      1200   
+4  ...      20940      19146      19131      2000     36681     10000   
+
+   PAY_AMT4  PAY_AMT5  PAY_AMT6  default payment next month  
+0         0         0         0                           1  
+1      1000         0      2000                           1  
+2      1000      1000      5000                           0  
+3      1100      1069      1000                           0  
+4      9000       689       679                           0  
+
+[5 rows x 25 columns]
+
+Column names: ['ID', 'LIMIT_BAL', 'SEX', 'EDUCATION', 'MARRIAGE', 'AGE', 'PAY_0', 'PAY_2', 'PAY_3', 'PAY_4', 'PAY_5', 'PAY_6', 'BILL_AMT1', 'BILL_AMT2', 'BILL_AMT3', 'BILL_AMT4', 'BILL_AMT5', 'BILL_AMT6', 'PAY_AMT1', 'PAY_AMT2', 'PAY_AMT3', 'PAY_AMT4', 'PAY_AMT5', 'PAY_AMT6', 'default_payment_next_month']
+
+Target column: default_payment_next_month
+Target distribution:
+default_payment_next_month
+0    23364
+1     6636
+Name: count, dtype: int64
+
+After SMOTE - Class distribution: {1: 23364, 0: 23364}
+
+🔵 Training Logistic Regression...
+ROC-AUC Score: 0.7259
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.66      0.69      0.67      4664
+           1       0.67      0.65      0.66      4682
+
+    accuracy                           0.67      9346
+   macro avg       0.67      0.67      0.67      9346
+weighted avg       0.67      0.67      0.67      9346
+
+
+🔵 Training Random Forest...
+ROC-AUC Score: 0.9260
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.83      0.88      0.86      4664
+           1       0.88      0.82      0.85      4682
+
+    accuracy                           0.85      9346
+   macro avg       0.85      0.85      0.85      9346
+weighted avg       0.85      0.85      0.85      9346
+
+
+🔵 Training XGBoost...
+ROC-AUC Score: 0.9209
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.82      0.91      0.86      4664
+           1       0.90      0.80      0.85      4682
+
+    accuracy                           0.85      9346
+   macro avg       0.86      0.85      0.85      9346
+weighted avg       0.86      0.85      0.85      9346
+
+
+Best Model: Random Forest with ROC-AUC: 0.9260
